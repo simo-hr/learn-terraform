@@ -1,4 +1,4 @@
-resource "google_cloud_run_v2_service" "web-server" {
+resource "google_cloud_run_v2_service" "web_server" {
   name     = "next-web"
   location = var.region
   template {
@@ -30,6 +30,7 @@ resource "google_cloud_run_v2_service" "web-server" {
 
   }
   traffic {
+    type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
     percent = 100
   }
   depends_on = [google_secret_manager_secret_version.secret-version-data]
@@ -37,9 +38,9 @@ resource "google_cloud_run_v2_service" "web-server" {
 
 resource "google_secret_manager_secret" "secret" {
   secret_id = "secret-1"
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+    # prevent_destroy = true
+  # }
 
   replication {
     auto {

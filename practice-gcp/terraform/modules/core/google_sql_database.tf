@@ -37,7 +37,21 @@ resource "google_sql_database_instance" "main" {
     tier         = "db-f1-micro"
   }
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
+}
+
+resource "google_sql_database" "main" {
+  name       = var.region
+  instance   = google_sql_database_instance.main.name
+  depends_on = [google_sql_database_instance.main]
+}
+
+
+resource "google_sql_user" "main" {
+  name       = "primary-user"
+  instance   = google_sql_database_instance.main.name
+  password   = "primary-password"
+  depends_on = [google_sql_database_instance.main]
 }
